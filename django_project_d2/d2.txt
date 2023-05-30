@@ -1,0 +1,64 @@
+u1 = User.objects.create_user('Иван')
+u2 = User.objects.create_user('Петр')
+
+
+Author.objects.create(authorUser = u1) 
+Author.objects.create(authorUser = u2) 
+
+Category.objects.create(types = 'Sport')
+Category.objects.create(types = 'Politics')
+Category.objects.create(types = 'Education')
+Category.objects.create(types = 'IT')
+
+author1 = Author.objects.get(id=1)
+Post.objects.create(postAuthor = author1, categoryType = 'NW', title = 'First news', text = 'sometext')
+Post.objects.create(postAuthor = author1, categoryType = 'AR', title = 'First article', text = 'sometext')
+author2 = Author.objects.get(id=2)
+Post.objects.create(postAuthor = author2, categoryType = 'AR', title = 'Second article', text = 'sometext')
+
+Post.objects.get(id=1).categories.add(Category.objects.get(types = 'Sport'))
+Post.objects.get(id=1).categories.add(Category.objects.get(types = 'Politics'))
+Post.objects.get(id=2).categories.add(Category.objects.get(types = 'Education'))
+Post.objects.get(id=2).categories.add(Category.objects.get(types = 'IT'))
+Post.objects.get(id=3).categories.add(Category.objects.get(types = 'Education'))
+Post.objects.get(id=3).categories.add(Category.objects.get(types = 'IT'))
+
+Comment.objects.create(post_com=Post.objects.get(id=1), user_com=Author.objects.get(id=1).authorUser, text_com='First comment')
+Comment.objects.create(post_com=Post.objects.get(id=1), user_com=Author.objects.get(id=2).authorUser, text_com='Second comment') 
+Comment.objects.create(post_com=Post.objects.get(id=2), user_com=Author.objects.get(id=1).authorUser, text_com='another comment')
+Comment.objects.create(post_com=Post.objects.get(id=3), user_com=Author.objects.get(id=2).authorUser, text_com='comment') 
+
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=2).dislike()
+Post.objects.get(id=2).like()
+Post.objects.get(id=2).like()
+Post.objects.get(id=2).dislike()
+
+a = Author.objects.get(id=2)
+a.update_rating()
+a.ratingAuthor
+
+Comment.objects.get(id=3).like()
+Comment.objects.get(id=3).dislike()
+Comment.objects.get(id=3).dislike()
+Post.objects.get(id=3).like()
+Post.objects.get(id=3).silike()
+Post.objects.get(id=3).dislike()
+
+b = Author.objects.get(id=3)
+b.update_rating()
+b.ratingAuthor
+
+c = Author.objects.order_by('-ratingAuthor')
+c[0].authorUser.username
+c[0].ratingAuthor
+
+d = Post.objects.order_by('-rating')
+d[0].time_in
+d[0].postAuthor.authorUser.username
+d[0].rating
+d[0].title
+d[0].preview()
+
+
